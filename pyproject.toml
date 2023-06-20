@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "django-mixed"
+version = "0.1.0"
+description = ""
+authors = ["islom <eshonqulovislom1@gmail.com>"]
+readme = "README.md"
+packages = [{include = "django_mixed"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2.2"
+python-dotenv = "^1.0.0"
+djangorestframework = "^3.14.0"
+drf-yasg = "^1.21.6"
+django-mptt = "^0.14.0"
+pillow = "^9.5.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
