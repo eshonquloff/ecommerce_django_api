@@ -2,6 +2,7 @@ import os.path
 from pathlib import Path
 from dotenv import load_dotenv
 
+
 load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -10,7 +11,6 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = ['*']
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'mptt',
+    'rest_framework_simplejwt',
 
 ]
 
@@ -59,14 +60,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'root.wsgi.application'
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -83,7 +82,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Tashkent'
@@ -91,7 +89,6 @@ TIME_ZONE = 'Asia/Tashkent'
 USE_I18N = True
 
 USE_TZ = True
-
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR / 'static')
@@ -103,34 +100,40 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     # 'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
 }
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
-          'Basic': {
-                'type': 'basic'
-          },
-          'Bearer': {
-                'type': 'apiKey',
-                'name': 'Authorization',
-                'in': 'header'
-          }
-       },
+        'Basic': {
+            'type': 'basic'
+        },
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
     'USE_SESSION_AUTH': False,
-     # 'SECURITY_DEFINITIONS': {
-     #    'Your App API - Swagger': {
-     #       'type': 'oauth2',
-     #       'authorizationUrl': '/yourapp/o/authorize',
-     #       'tokenUrl': '/yourapp/o/token/',
-     #       'flow': 'accessCode',
-     #       'scopes': {
-     #        'read:groups': 'read groups',
-     #       }
-     #    }
-     # },
     'OAUTH2_CONFIG': {
-       'clientId': 'yourAppClientId',
-       'clientSecret': 'yourAppClientSecret',
-       'appName': 'your application name'
-       },
+        'clientId': 'yourAppClientId',
+        'clientSecret': 'yourAppClientSecret',
+        'appName': 'your application name'
+    },
 }
+
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+AWS_ACCESS_KEY_ID = os.getenv("MINIO_ROOT_USER")
+AWS_SECRET_ACCESS_KEY = os.getenv("MINIO_ROOT_PASSWORD")
+AWS_STORAGE_BUCKET_NAME = os.getenv("MINIO_BUCKET_NAME")
+AWS_S3_ENDPOINT_URL = os.getenv("MINIO_ENDPOINT")
+
+
+# AWS_DEFAULT_ACL = None
+# AWS_QUERYSTRING_AUTH = True
+# AWS_S3_FILE_OVERWRITE = False
+
+

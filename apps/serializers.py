@@ -22,3 +22,6 @@ class ProductModelSerializer(ModelSerializer):
 
     images = ProductImageModelSerializer(many=True, read_only=True)
 
+
+
+
