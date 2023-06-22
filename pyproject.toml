@@ -18,6 +18,10 @@ djangorestframework-simplejwt = "^5.2.2"
 boto3 = "^1.26.156"
 django-storages = "^1.13.2"
 minio = "^7.1.15"
+django-filter = "^23.2"
+coreapi = "^2.3.3"
+pyyaml = "^6.0"
+django-elasticsearch-dsl-drf = "^0.22.5"
 
 
 [build-system]

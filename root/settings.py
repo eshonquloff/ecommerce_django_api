@@ -2,13 +2,12 @@ import os.path
 from pathlib import Path
 from dotenv import load_dotenv
 
-
 load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = os.getenv('DEBUG')
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -26,7 +25,9 @@ INSTALLED_APPS = [
     'drf_yasg',
     'mptt',
     'rest_framework_simplejwt',
-
+    'django_filters',
+    'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl_drf',
 ]
 
 MIDDLEWARE = [
@@ -44,8 +45,7 @@ ROOT_URLCONF = 'root.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -102,6 +102,10 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
 
@@ -116,12 +120,8 @@ SWAGGER_SETTINGS = {
             'in': 'header'
         }
     },
-    'USE_SESSION_AUTH': False,
-    'OAUTH2_CONFIG': {
-        'clientId': 'yourAppClientId',
-        'clientSecret': 'yourAppClientSecret',
-        'appName': 'your application name'
-    },
+    'LOGIN_URL': 'admin:login',
+    'LOGOUT_URL': 'admin:logout'
 }
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
@@ -131,9 +131,14 @@ AWS_SECRET_ACCESS_KEY = os.getenv("MINIO_ROOT_PASSWORD")
 AWS_STORAGE_BUCKET_NAME = os.getenv("MINIO_BUCKET_NAME")
 AWS_S3_ENDPOINT_URL = os.getenv("MINIO_ENDPOINT")
 
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:9200'
+    },
+}
 
-# AWS_DEFAULT_ACL = None
-# AWS_QUERYSTRING_AUTH = True
-# AWS_S3_FILE_OVERWRITE = False
+# Name of the Elasticsearch index
 
-
+ELASTICSEARCH_INDEX_NAMES = {
+    'apps.documents.product': 'product',
+}

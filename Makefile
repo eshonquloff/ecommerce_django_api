@@ -4,3 +4,6 @@ poetry:
 migrate:
 	python3 manage.py makemigrations
 	python3 manage.py migrate
+
+index:
+	python3 manage.py search_index --rebuild
