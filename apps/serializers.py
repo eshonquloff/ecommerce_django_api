@@ -1,9 +1,16 @@
+from django.contrib.auth.models import User
 from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import ModelSerializer, ListSerializer
 
-from apps.documents import ProductDocument
-from apps.models import Category, Product, ProductImage, Cart, Brand
+
+from apps.models import Category, Product, ProductImage, Cart, Brand, Favourite
+
+
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username')
 
 
 class DynamicFieldsModelSerializer(ModelSerializer):
@@ -58,19 +65,31 @@ class CreateProductModelSerializer(ModelSerializer):
         fields = '__all__'
 
 
-class CartModelSerializer(ModelSerializer):
+class CreateCartModelSerializer(ModelSerializer):
+    product = ListProductModelSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = Cart
-        fields = '__all__'
-
-    def validate(self, attrs):
-        product = Product.objects.filter(id=attrs.product.id).first()
-        if attrs.product_count > product.product_count:
-            return ValidationError('buyurtmalar soni mahsulot sonidan ko`p!')
-        return attrs
+        fields = 'user', 'product', 'product_count'
 
 
-class ProductDocumentSerializer(DocumentSerializer):
+class ListCartModelSerializer(ModelSerializer):
+    product = ListProductModelSerializer(read_only=True)
+
     class Meta:
-        document = ProductDocument
-        fields = ('id', 'title', 'description')
+        model = Cart
+        fields = 'product_count', 'product'
+
+
+class ListFavouriteModelSerializer(ModelSerializer):
+    product = ListProductModelSerializer(read_only=True)
+
+    class Meta:
+        model = Favourite
+        fields = ('product',)
+
+# class ProductDocumentSerializer(DocumentSerializer):
+#     class Meta:
+#         document = ProductDocument
+#         fields = ('id', 'title', 'description')

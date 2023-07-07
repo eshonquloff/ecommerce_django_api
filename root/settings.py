@@ -131,6 +131,7 @@ AWS_SECRET_ACCESS_KEY = os.getenv("MINIO_ROOT_PASSWORD")
 AWS_STORAGE_BUCKET_NAME = os.getenv("MINIO_BUCKET_NAME")
 AWS_S3_ENDPOINT_URL = os.getenv("MINIO_ENDPOINT")
 
+
 ELASTICSEARCH_DSL = {
     'default': {
         'hosts': 'localhost:9200'
@@ -139,6 +140,6 @@ ELASTICSEARCH_DSL = {
 
 # Name of the Elasticsearch index
 
-ELASTICSEARCH_INDEX_NAMES = {
-    'apps.documents.product': 'product',
-}
+# ELASTICSEARCH_INDEX_NAMES = {
+#     'apps.documents.product': 'product',
+# }

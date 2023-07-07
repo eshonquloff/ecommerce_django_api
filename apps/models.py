@@ -28,7 +28,7 @@ class Product(Model):
     category = ForeignKey(Category, CASCADE, related_name='products')
     discount = PositiveSmallIntegerField(default=0)
     view_count = PositiveIntegerField(default=0)
-    quantity = PositiveIntegerField(default=0)
+    quantity = PositiveIntegerField(default=1)
     updated_at = DateTimeField(auto_now=True)
     created_at = DateTimeField(auto_now_add=True)
 
@@ -52,5 +52,13 @@ class Favourite(Model):
 
 class Cart(Model):
     product = ForeignKey(Product, on_delete=CASCADE, related_name='carts')
-    booker = ForeignKey(User, on_delete=CASCADE, related_name='carts')
+    user = ForeignKey(User, on_delete=CASCADE, related_name='carts')
     product_count = PositiveIntegerField(default=1)
+
+
+class ViewHistory(Model):
+    product = ForeignKey(Product, on_delete=CASCADE, related_name='view_histories')
+    user = ForeignKey(User, on_delete=CASCADE, related_name='view_histories')
+    last_view = DateTimeField(auto_now=True)
+
+
